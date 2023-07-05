@@ -25,7 +25,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
   bytes32 public prevRoot; // The merkle tree's root of the previous rewards distribution.
   mapping(address => mapping(address => uint256)) public claimed; // The rewards already claimed. account -> amount.
 
-  constructor(address _manager, address _addressesProvider) {
+  constructor(address _manager, address _addressesProvider) payable {
     manager = _manager;
     addressesProvider = ILendingPoolAddressesProvider(_addressesProvider);
   }
@@ -53,7 +53,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
     address assetMappings = addressesProvider.getAssetMappings();
     address underlying = IAToken(aToken).UNDERLYING_ASSET_ADDRESS();
     uint64 trancheId = IAToken(aToken)._tranche();
-    
+
     require(!stakingExists(aToken), "Cannot add staking reward for a token that already has staking");
     require(!IAssetMappings(assetMappings).getAssetBorrowable(underlying), "Underlying cannot be borrowable for external rewards");
 
@@ -66,7 +66,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
       IERC20(underlying).safeTransferFrom(aToken, address(this), amount);
       IStakingRewards(stakingContract).stake(amount);
     }
-    
+
 
     emit RewardConfigured(aToken, stakingContract, amount);
   }

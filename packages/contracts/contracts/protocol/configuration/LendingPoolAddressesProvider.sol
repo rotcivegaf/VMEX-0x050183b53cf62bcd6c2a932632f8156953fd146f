@@ -51,7 +51,7 @@ contract LendingPoolAddressesProvider is
 
     bytes32 private constant INCENTIVES_CONTROLLER = "INCENTIVES_CONTROLLER";
 
-    constructor(string memory marketId) {
+    constructor(string memory marketId) payable {
         _setMarketId(marketId);
         permissionlessTranches = false;
     }

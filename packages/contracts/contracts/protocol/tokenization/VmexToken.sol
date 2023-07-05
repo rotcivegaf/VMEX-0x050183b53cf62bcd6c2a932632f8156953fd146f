@@ -7,7 +7,7 @@ import {ERC20Votes} from "../../dependencies/openzeppelin/contracts/governance/E
 
 contract VmexToken is ERC20Upgraded, ERC20Permit, ERC20Votes {
 
-    constructor() ERC20Upgraded("Vmex Token", "VMEX") ERC20Permit("Vmex Token")
+    constructor() payable ERC20Upgraded("Vmex Token", "VMEX") ERC20Permit("Vmex Token")
     {
         _mint(msg.sender, 100000000e18); // 100 million Vmex
     }

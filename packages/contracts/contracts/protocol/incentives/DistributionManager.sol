@@ -20,7 +20,7 @@ contract DistributionManager is IDistributionManager {
 
   address public immutable EMISSION_MANAGER;
 
-  constructor(address emissionManager) {
+  constructor(address emissionManager) payable {
     EMISSION_MANAGER = emissionManager;
   }
 

@@ -33,7 +33,7 @@ contract IncentivesController is
     address emissionManager,
     address externalRewardManager,
     address addressesProvider
-  ) DistributionManager(emissionManager)
+  ) payable DistributionManager(emissionManager)
     ExternalRewardDistributor(externalRewardManager, addressesProvider) {
     REWARDS_VAULT = rewardsVault;
   }

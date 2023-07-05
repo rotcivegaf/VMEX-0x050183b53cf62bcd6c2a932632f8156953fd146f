@@ -31,7 +31,7 @@ abstract contract IncentivizedERC20 is IERC20, IERC20Detailed {
         string memory __name,
         string memory __symbol,
         uint8 __decimals
-    ) {
+    ) payable {
         _name = __name;
         _symbol = __symbol;
         _decimals = __decimals;
