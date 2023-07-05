@@ -118,7 +118,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
     function setVMEXReserveFactor(
         address asset,
         uint256 reserveFactor
-    ) public onlyGlobalAdmin {
+    ) external onlyGlobalAdmin {
         require(isAssetInMappings(asset), Errors.AM_ASSET_DOESNT_EXIST);
         uint256 thisReserveFactor = reserveFactor.convertToPercent();
         validateVMEXReserveFactor(thisReserveFactor);
@@ -372,7 +372,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);
