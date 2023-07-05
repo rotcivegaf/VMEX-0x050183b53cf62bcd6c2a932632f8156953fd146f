@@ -41,7 +41,7 @@ contract IncentivesController is
   /**
    * @dev Called by the proxy contract. Not used at the moment, but for the future
    **/
-  function initialize() external initializer {
+  function initialize() external payable initializer {
     // to unlock possibility to stake on behalf of the user
     // REWARD_TOKEN.approve(address(PSM), type(uint256).max);
   }

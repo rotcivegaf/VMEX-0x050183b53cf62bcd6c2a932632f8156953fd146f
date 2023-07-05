@@ -70,7 +70,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
 
     function initialize (
         ILendingPoolAddressesProvider provider
-    ) public initializer {
+    ) public payable initializer {
         _addressProvider = provider;
         _assetMappings = IAssetMappings(_addressProvider.getAssetMappings());
     }

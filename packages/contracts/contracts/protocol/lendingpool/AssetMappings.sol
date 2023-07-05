@@ -93,6 +93,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
 
     function initialize(ILendingPoolAddressesProvider provider)
         public
+        payable
         initializer
     {
         addressesProvider = ILendingPoolAddressesProvider(provider);

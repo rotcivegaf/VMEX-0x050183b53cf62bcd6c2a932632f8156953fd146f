@@ -40,5 +40,5 @@ interface IInitializableDebtToken {
         address underlyingAsset,
         uint64 trancheId,
         ILendingPoolAddressesProvider addressesProvider
-    ) external;
+    ) external payable;
 }

@@ -86,7 +86,7 @@ contract LendingPoolConfigurator is
         return CONFIGURATOR_REVISION;
     }
 
-    function initialize(address provider) public initializer {
+    function initialize(address provider) public payable initializer {
         addressesProvider = ILendingPoolAddressesProvider(provider);
         pool = ILendingPool(addressesProvider.getLendingPool());
         assetMappings = IAssetMappings(addressesProvider.getAssetMappings());

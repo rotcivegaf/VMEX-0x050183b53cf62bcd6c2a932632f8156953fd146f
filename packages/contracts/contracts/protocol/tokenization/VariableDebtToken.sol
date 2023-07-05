@@ -39,7 +39,7 @@ contract VariableDebtToken is DebtTokenBase, IVariableDebtToken {
         address underlyingAsset,
         uint64 trancheId,
         ILendingPoolAddressesProvider addressesProvider
-    ) public override initializer {
+    ) public payable override initializer {
 
         uint8 debtTokenDecimals = IERC20Detailed(underlyingAsset).decimals();
         string memory debtTokenName = string(

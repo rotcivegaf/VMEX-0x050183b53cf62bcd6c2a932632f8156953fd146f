@@ -42,5 +42,5 @@ interface IInitializableAToken {
     function initialize(
         ILendingPool pool,
         InitializeTreasuryVars memory vars
-    ) external;
+    ) external payable;
 }
