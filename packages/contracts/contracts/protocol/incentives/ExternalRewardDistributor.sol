@@ -53,7 +53,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
     address assetMappings = addressesProvider.getAssetMappings();
     address underlying = IAToken(aToken).UNDERLYING_ASSET_ADDRESS();
     uint64 trancheId = IAToken(aToken)._tranche();
-    
+
     require(!stakingExists(aToken), "Cannot add staking reward for a token that already has staking");
     require(!IAssetMappings(assetMappings).getAssetBorrowable(underlying), "Underlying cannot be borrowable for external rewards");
 
@@ -66,7 +66,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
       IERC20(underlying).safeTransferFrom(aToken, address(this), amount);
       IStakingRewards(stakingContract).stake(amount);
     }
-    
+
 
     emit RewardConfigured(aToken, stakingContract, amount);
   }
@@ -77,8 +77,9 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
   ) external onlyManager {
     require(aTokens.length == stakingContracts.length, "Malformed input");
 
-    for(uint i = 0; i < aTokens.length; i++) {
+    for(uint i = 0; i < aTokens.length;) {
         beginStakingReward(aTokens[i], stakingContracts[i]);
+        unchecked{ ++i; }
     }
   }
 

@@ -41,7 +41,7 @@ library Helpers {
     }
 
     /**
-     * @dev Gets a string attribute of a token (in our case, the name and symbol attribute), where it could 
+     * @dev Gets a string attribute of a token (in our case, the name and symbol attribute), where it could
      * not be implemented, or return bytes32, or return a string
      * @param token The token
      * @param functionToQuery The function to query the string of
@@ -78,7 +78,7 @@ library Helpers {
     /**
      * @dev Helper function to get name of erc20 token since some protocols return a bytes32, others do string, others don't even implement.
      * @param token The token
-     **/ 
+     **/
     function getName(address token) internal view returns(string memory) {
         return getStringAttribute(token, "name()");
     }
@@ -87,7 +87,7 @@ library Helpers {
      * @dev Helper function to compare suffix of str to a target
      * @param str String with suffix to compare
      * @param target target string
-     **/ 
+     **/
     function compareSuffix(string memory str, string memory target) internal pure returns(bool) {
         uint strLen = bytes(str).length;
         uint targetLen = bytes(target).length;
@@ -100,8 +100,11 @@ library Helpers {
 
         bytes memory suffixBytes = new bytes(targetLen);
 
-        for (uint i = 0; i < targetLen; i++) {
-            suffixBytes[i] = bytes(str)[suffixStart + i];
+        for (uint i = 0; i < targetLen;) {
+            unchecked{
+                suffixBytes[i] = bytes(str)[suffixStart + i];
+                ++i;
+            }
         }
 
         string memory suffix = string(suffixBytes);

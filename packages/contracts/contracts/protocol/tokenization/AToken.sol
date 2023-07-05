@@ -462,7 +462,7 @@ contract AToken is
             )
         );
         require(owner == ecrecover(digest, v, r, s), "INVALID_SIGNATURE");
-        _nonces[owner] = currentValidNonce.add(1);
+        unchecked{ _nonces[owner] = currentValidNonce.add(1); }
         _approve(owner, spender, value);
     }
 

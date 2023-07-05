@@ -575,8 +575,9 @@ contract LendingPool is
         uint8 reservesCount = trancheParams[trancheId].reservesCount;
         address[] memory _activeReserves = new address[](reservesCount);
 
-        for (uint256 i = 0; i < reservesCount; i++) {
+        for (uint256 i = 0; i < reservesCount;) {
             _activeReserves[i] = _reservesList[trancheId][i];
+            unchecked{ ++i; }
         }
         return _activeReserves;
     }

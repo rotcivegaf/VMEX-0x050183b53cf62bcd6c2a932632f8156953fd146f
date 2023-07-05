@@ -33,7 +33,7 @@ contract DistributionManager is IDistributionManager {
    **/
   function configureRewards(RewardConfig[] calldata config) external override {
     require(msg.sender == EMISSION_MANAGER, 'ONLY_EMISSION_MANAGER');
-    for (uint256 i = 0; i < config.length; i++) {
+    for (uint256 i = 0; i < config.length;) {
       DistributionTypes.IncentivizedAsset storage incentivizedAsset = _incentivizedAssets[
         config[i].incentivizedAsset
       ];
@@ -47,7 +47,7 @@ contract DistributionManager is IDistributionManager {
       if (reward.lastUpdateTimestamp == 0) {
         // this reward has not been introduced yet
         incentivizedAsset.rewardList[incentivizedAsset.numRewards] = config[i].reward;
-        incentivizedAsset.numRewards++;
+        unchecked{ ++incentivizedAsset.numRewards; }
         _allRewards.push(config[i].reward);
       }
 
@@ -64,6 +64,7 @@ contract DistributionManager is IDistributionManager {
         config[i].endTimestamp,
         index
       );
+      unchecked{ ++i; }
     }
   }
 
@@ -124,7 +125,7 @@ contract DistributionManager is IDistributionManager {
     assert(userBalance <= assetSupply); // will catch cases such as if userBalance and assetSupply were flipped
     DistributionTypes.IncentivizedAsset storage incentivizedAsset = _incentivizedAssets[asset];
 
-    for (uint128 i = 0; i < incentivizedAsset.numRewards; i++) {
+    for (uint128 i = 0; i < incentivizedAsset.numRewards;) {
       address rewardAddress = incentivizedAsset.rewardList[i];
 
       DistributionTypes.Reward storage reward = incentivizedAsset.rewardData[rewardAddress];
@@ -144,6 +145,7 @@ contract DistributionManager is IDistributionManager {
       if (rewardUpdated || userUpdated) {
         emit RewardAccrued(asset, rewardAddress, user, newIndex, rewardAccrued);
       }
+      unchecked{ ++i; }
     }
   }
 
@@ -154,13 +156,14 @@ contract DistributionManager is IDistributionManager {
     address user,
     DistributionTypes.UserAssetState[] memory userAssets
   ) internal {
-    for (uint256 i = 0; i < userAssets.length; i++) {
+    for (uint256 i = 0; i < userAssets.length;) {
       _updateIncentivizedAsset(
         userAssets[i].asset,
         user,
         userAssets[i].userBalance,
         userAssets[i].totalSupply
       );
+      unchecked{ ++i; }
     }
   }
 
@@ -258,11 +261,12 @@ contract DistributionManager is IDistributionManager {
     address reward
   ) external view override returns (uint256) {
     uint256 total;
-    for (uint256 i = 0; i < _allIncentivizedAssets.length; i++) {
+    for (uint256 i = 0; i < _allIncentivizedAssets.length;) {
       total += _incentivizedAssets[_allIncentivizedAssets[i]]
         .rewardData[reward]
         .users[user]
         .accrued;
+      unchecked{ ++i; }
     }
 
     return total;

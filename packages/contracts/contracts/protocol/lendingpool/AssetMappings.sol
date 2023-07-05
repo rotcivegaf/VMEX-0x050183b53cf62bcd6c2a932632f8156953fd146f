@@ -83,6 +83,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
                     Errors.AM_UNABLE_TO_DISALLOW_ASSET
                 );
             }
+            unchecked{ ++tranche; }
         }
 
     }
@@ -200,7 +201,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
     function addAssetMapping(
         AddAssetMappingInput[] memory input
     ) external onlyGlobalAdmin {
-        for(uint256 i = 0; i<input.length; i++) {
+        for(uint256 i = 0; i<input.length;) {
             AddAssetMappingInput memory inputAsset = input[i];
             address currentAssetAddress = inputAsset.asset;
             validateAddAssetMapping(inputAsset);
@@ -254,6 +255,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
                 inputAsset.borrowingEnabled,
                 inputAsset.VMEXReserveFactor
             );
+            unchecked{ ++i; }
         }
     }
 
@@ -344,7 +346,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         while(tmp != address(0)) {
             if(assetMappings[tmp].isAllowed) {
                 tokens[i] = tmp;
-                i++;
+                unchecked{ ++i; }
             }
 
             tmp = assetMappings[tmp].nextApprovedAsset;
@@ -372,7 +374,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);
@@ -403,7 +405,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
     function addInterestRateStrategyAddress(address asset, address strategy) external onlyGlobalAdmin {
         require(Address.isContract(strategy), Errors.AM_INTEREST_STRATEGY_NOT_CONTRACT);
         while(interestRateStrategyAddress[asset][numInterestRateStrategyAddress[asset]]!=address(0)){
-            numInterestRateStrategyAddress[asset]++;
+            unchecked{ ++numInterestRateStrategyAddress[asset]; }
         }
         interestRateStrategyAddress[asset][numInterestRateStrategyAddress[asset]] = strategy;
         emit AddedInterestRateStrategyAddress(
@@ -425,8 +427,9 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      **/
     function setCurveMetadata(address[] calldata assets, DataTypes.CurveMetadata[] calldata vars) external override onlyGlobalAdmin {
         require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        for(uint i = 0;i<assets.length;){
             curveMetadata[assets[i]] = vars[i];
+            unchecked{ ++i; }
         }
     }
 
@@ -439,8 +442,9 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      **/
     function setBeethovenMetadata(address[] calldata assets, DataTypes.BeethovenMetadata[] calldata vars) external onlyGlobalAdmin {
         require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        for(uint i = 0;i<assets.length;){
             beethovenMetadata[assets[i]] = vars[i];
+            unchecked{ ++i; }
         }
     }
 
