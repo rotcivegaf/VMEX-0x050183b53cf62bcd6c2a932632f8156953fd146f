@@ -102,7 +102,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         ChainlinkData[] calldata sources
     ) external onlyGlobalAdmin {
         require(assets.length == sources.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for (uint256 i = 0; i < assets.length; i++) {
+        for (uint256 i; i < assets.length; i++) {
             require(Helpers.compareSuffix(IChainlinkPriceFeed(sources[i].feed).description(), BASE_CURRENCY_STRING), Errors.VO_BAD_DENOMINATION);
             _assetsSources[assets[i]] = sources[i];
             emit AssetSourceUpdated(assets[i], address(sources[i].feed));
@@ -163,7 +163,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
     }
 
     /**
-     * @dev Gets an asset price by address. 
+     * @dev Gets an asset price by address.
      * Note the result should always have 18 decimals if using ETH as base. If using USD as base, there will be 8 decimals
      * @param asset The asset address
      **/
@@ -218,8 +218,8 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 /*uint80 answeredInRound*/
             ) = IChainlinkPriceFeed(source).latestRoundData();
             IChainlinkAggregator aggregator = IChainlinkAggregator(IChainlinkPriceFeed(source).aggregator());
-            if (price > int256(aggregator.minAnswer()) && 
-                price < int256(aggregator.maxAnswer()) && 
+            if (price > int256(aggregator.minAnswer()) &&
+                price < int256(aggregator.maxAnswer()) &&
                 block.timestamp - updatedAt < _assetsSources[asset].heartbeat
             ) {
                 return uint256(price);
@@ -245,7 +245,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
 
         uint256[] memory prices = new uint256[](c._poolSize);
 
-        for (uint256 i = 0; i < c._poolSize; i++) {
+        for (uint256 i; i < c._poolSize; i++) {
             address underlying = ICurvePool(c._curvePool).coins(i);
             if(underlying == ETH_NATIVE){
                 underlying = WETH;
@@ -314,7 +314,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
             ,
         ) = vault.getPoolTokens(poolId);
 
-        uint256 i = 0;
+        uint256 i;
 
         if(address(tokens[0]) == asset) { //boosted tokens first token is itself
             i = 1;
@@ -322,7 +322,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
 
         uint256[] memory prices = new uint256[](tokens.length-i);
 
-        uint256 j = 0;
+        uint256 j;
 
         while(i<tokens.length) {
             address token = address(tokens[i]);
@@ -386,7 +386,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         returns (uint256[] memory)
     {
         uint256[] memory prices = new uint256[](assets.length);
-        for (uint256 i = 0; i < assets.length; i++) {
+        for (uint256 i; i < assets.length; i++) {
             prices[i] = getAssetPrice(assets[i]);
         }
         return prices;

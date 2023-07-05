@@ -144,7 +144,7 @@ contract LendingPoolConfigurator is
         uint64 trancheId
     ) external onlyTrancheAdmin(trancheId) {
         ILendingPool cachedPool = pool;
-        for (uint256 i = 0; i < input.length; i++) {
+        for (uint256 i; i < input.length; i++) {
             _initReserve(
                 input[i],
                 trancheId,
@@ -271,7 +271,7 @@ contract LendingPoolConfigurator is
         bool[] calldata borrowingEnabled
     ) external onlyTrancheAdmin(trancheId) {
         require(asset.length == borrowingEnabled.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0; i<asset.length;i++){
+        for(uint i; i<asset.length;i++){
             require(!borrowingEnabled[i] || assetMappings.getAssetBorrowable(asset[i]), Errors.LPC_NOT_APPROVED_BORROWABLE);
             DataTypes.ReserveConfigurationMap memory currentConfig = pool
                 .getConfiguration(asset[i], trancheId);
@@ -297,7 +297,7 @@ contract LendingPoolConfigurator is
         bool[] calldata collateralEnabled
     ) external onlyTrancheAdmin(trancheId) {
         require(asset.length == collateralEnabled.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0; i<asset.length;i++){
+        for(uint i; i<asset.length;i++){
             if(!collateralEnabled[i]){
                 _checkNoLiquidity(asset[i], trancheId);
             }
@@ -324,7 +324,7 @@ contract LendingPoolConfigurator is
         uint256[] calldata reserveFactor
     ) external onlyTrancheAdmin(trancheId) {
         require(asset.length == reserveFactor.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0; i<asset.length;i++){
+        for(uint i; i<asset.length;i++){
             //reserve factor can only be changed if no one deposited in it, otherwise tranche admins could "rug pull" the interest earnings in there
             _checkNoLiquidity(asset[i], trancheId);
             DataTypes.ReserveConfigurationMap memory currentConfig = ILendingPool(
@@ -356,7 +356,7 @@ contract LendingPoolConfigurator is
         onlyTrancheAdmin(trancheId)
     {
         require(asset.length == isFrozen.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0; i<asset.length;i++){
+        for(uint i; i<asset.length;i++){
             DataTypes.ReserveConfigurationMap memory currentConfig = ILendingPool(
                 pool
             ).getConfiguration(asset[i], trancheId);
@@ -401,7 +401,7 @@ contract LendingPoolConfigurator is
         bool[] calldata isWhitelisted
     ) external onlyTrancheAdmin(trancheId) {
         require(user.length == isWhitelisted.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<user.length;i++) {
+        for(uint i;i<user.length;i++) {
             pool.addToWhitelist(trancheId, user[i], isWhitelisted[i]);
             emit UserChangedWhitelist(trancheId, user[i], isWhitelisted[i]);
         }
@@ -420,7 +420,7 @@ contract LendingPoolConfigurator is
         bool[] calldata isBlacklisted
     ) external onlyTrancheAdmin(trancheId) {
         require(user.length == isBlacklisted.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<user.length;i++) {
+        for(uint i;i<user.length;i++) {
             pool.addToBlacklist(trancheId, user[i], isBlacklisted[i]);
             emit UserChangedBlacklist(trancheId, user[i], isBlacklisted[i]);
         }

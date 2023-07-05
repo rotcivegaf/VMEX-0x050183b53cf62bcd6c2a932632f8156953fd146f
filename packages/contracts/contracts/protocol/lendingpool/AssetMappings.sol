@@ -65,7 +65,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         ).totalTranches();
 
         ILendingPool lendingPool = ILendingPool(addressesProvider.getLendingPool());
-        for (uint64 tranche = 0; tranche < totalTranches; tranche++) {
+        for (uint64 tranche; tranche < totalTranches; tranche++) {
             DataTypes.ReserveData memory reserve = lendingPool.getReserveData(asset, tranche);
             //no outstanding borrows allowed
             if (reserve.variableDebtTokenAddress != address(0)) {
@@ -96,8 +96,6 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         initializer
     {
         addressesProvider = ILendingPoolAddressesProvider(provider);
-        approvedAssetsHead = address(0);
-        approvedAssetsTail = address(0);
     }
 
     /**
@@ -200,7 +198,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
     function addAssetMapping(
         AddAssetMappingInput[] memory input
     ) external onlyGlobalAdmin {
-        for(uint256 i = 0; i<input.length; i++) {
+        for(uint256 i; i<input.length; i++) {
             AddAssetMappingInput memory inputAsset = input[i];
             address currentAssetAddress = inputAsset.asset;
             validateAddAssetMapping(inputAsset);
@@ -313,7 +311,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      * @dev Gets the number of allowed assets in the linked list
      **/
     function getNumApprovedTokens() view public returns (uint256) {
-        uint256 numTokens = 0;
+        uint256 numTokens;
         address tmp = approvedAssetsHead;
 
         while(tmp != address(0)) {
@@ -339,7 +337,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         uint256 numTokens = getNumApprovedTokens();
         address tmp = approvedAssetsHead;
         tokens = new address[](numTokens);
-        uint256 i = 0;
+        uint256 i;
 
         while(tmp != address(0)) {
             if(assetMappings[tmp].isAllowed) {
@@ -372,7 +370,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);
@@ -425,7 +423,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      **/
     function setCurveMetadata(address[] calldata assets, DataTypes.CurveMetadata[] calldata vars) external override onlyGlobalAdmin {
         require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        for(uint i;i<assets.length;i++){
             curveMetadata[assets[i]] = vars[i];
         }
     }
@@ -439,7 +437,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      **/
     function setBeethovenMetadata(address[] calldata assets, DataTypes.BeethovenMetadata[] calldata vars) external onlyGlobalAdmin {
         require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        for(uint i;i<assets.length;i++){
             beethovenMetadata[assets[i]] = vars[i];
         }
     }
