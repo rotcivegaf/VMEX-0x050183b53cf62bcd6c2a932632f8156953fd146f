@@ -113,7 +113,7 @@ contract LendingPoolAddressesProvider is
      * @dev Allows to set the market which this LendingPoolAddressesProvider represents
      * @param marketId The market id
      */
-    function setMarketId(string memory marketId) external payable override onlyOwner {
+    function setMarketId(string calldata marketId) external payable override onlyOwner {
         _setMarketId(marketId);
     }
 

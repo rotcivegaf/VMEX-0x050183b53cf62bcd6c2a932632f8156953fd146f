@@ -19,7 +19,7 @@ library vMath {
 		return _min;
 	}
 
-	function weightedAvg(uint256[] memory prices, uint256[] memory balances, uint8[] memory decimals) internal pure returns(uint256) {
+	function weightedAvg(uint256[] calldata prices, uint256[] calldata balances, uint8[] calldata decimals) internal pure returns(uint256) {
 		uint256 cumSum = 0;
 		uint256 cumBalances = 0;
 		uint256 pricesLength = prices.length;
