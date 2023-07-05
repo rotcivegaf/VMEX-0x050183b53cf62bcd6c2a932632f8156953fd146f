@@ -123,7 +123,7 @@ contract DistributionManager is IDistributionManager {
   ) internal {
     assert(userBalance <= assetSupply); // will catch cases such as if userBalance and assetSupply were flipped
     DistributionTypes.IncentivizedAsset storage incentivizedAsset = _incentivizedAssets[asset];
-    uint8 incentivizedAssetDecimals = incentivizedAsset.decimals = incentivizedAsset.decimals;
+    uint8 incentivizedAssetDecimals = incentivizedAsset.decimals;
     for (uint128 i = 0; i < incentivizedAsset.numRewards; i++) {
       address rewardAddress = incentivizedAsset.rewardList[i];
 
