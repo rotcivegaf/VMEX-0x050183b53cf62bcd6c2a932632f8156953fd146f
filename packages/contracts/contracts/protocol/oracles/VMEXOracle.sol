@@ -70,7 +70,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
 
     function initialize (
         ILendingPoolAddressesProvider provider
-    ) public initializer {
+    ) public payable initializer {
         _addressProvider = provider;
         _assetMappings = IAssetMappings(_addressProvider.getAssetMappings());
     }
@@ -163,7 +163,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
     }
 
     /**
-     * @dev Gets an asset price by address. 
+     * @dev Gets an asset price by address.
      * Note the result should always have 18 decimals if using ETH as base. If using USD as base, there will be 8 decimals
      * @param asset The asset address
      **/
@@ -218,8 +218,8 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 /*uint80 answeredInRound*/
             ) = IChainlinkPriceFeed(source).latestRoundData();
             IChainlinkAggregator aggregator = IChainlinkAggregator(IChainlinkPriceFeed(source).aggregator());
-            if (price > int256(aggregator.minAnswer()) && 
-                price < int256(aggregator.maxAnswer()) && 
+            if (price > int256(aggregator.minAnswer()) &&
+                price < int256(aggregator.maxAnswer()) &&
                 block.timestamp - updatedAt < _assetsSources[asset].heartbeat
             ) {
                 return uint256(price);

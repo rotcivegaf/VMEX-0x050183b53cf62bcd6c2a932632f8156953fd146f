@@ -93,6 +93,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
 
     function initialize(ILendingPoolAddressesProvider provider)
         public
+        payable
         initializer
     {
         addressesProvider = ILendingPoolAddressesProvider(provider);
@@ -372,7 +373,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);

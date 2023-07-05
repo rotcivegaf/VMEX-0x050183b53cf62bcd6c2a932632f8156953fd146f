@@ -105,7 +105,7 @@ contract AToken is
     function initialize(
         ILendingPool pool,
         InitializeTreasuryVars memory vars
-    ) external override initializer {
+    ) external payable override initializer {
         uint8 aTokenDecimals = IERC20Detailed(vars.underlyingAsset).decimals();
 
         string memory aTokenName = string(

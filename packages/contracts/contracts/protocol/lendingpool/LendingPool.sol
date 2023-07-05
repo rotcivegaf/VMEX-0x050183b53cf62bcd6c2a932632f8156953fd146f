@@ -103,6 +103,7 @@ contract LendingPool is
      **/
     function initialize(ILendingPoolAddressesProvider provider)
         public
+        payable
         initializer
     {
         _addressesProvider = provider;
