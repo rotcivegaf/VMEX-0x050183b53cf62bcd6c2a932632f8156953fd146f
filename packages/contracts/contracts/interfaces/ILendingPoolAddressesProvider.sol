@@ -47,35 +47,35 @@ interface ILendingPoolAddressesProvider {
 
     function getVMEXTreasury() external view returns(address);
 
-    function setVMEXTreasury(address add) external;
+    function setVMEXTreasury(address add) external payable;
 
     function getMarketId() external view returns (string memory);
 
-    function setMarketId(string calldata marketId) external;
+    function setMarketId(string calldata marketId) external payable;
 
-    function setAddress(bytes32 id, address newAddress) external;
+    function setAddress(bytes32 id, address newAddress) external payable;
 
-    function setAddressAsProxy(bytes32 id, address impl) external;
+    function setAddressAsProxy(bytes32 id, address impl) external payable;
 
     function getAddress(bytes32 id) external view returns (address);
 
     function getLendingPool() external view returns (address);
 
-    function setLendingPoolImpl(address pool) external;
+    function setLendingPoolImpl(address pool) external payable;
 
     function getLendingPoolConfigurator() external view returns (address);
 
-    function setLendingPoolConfiguratorImpl(address configurator) external;
+    function setLendingPoolConfiguratorImpl(address configurator) external payable;
 
     function getLendingPoolCollateralManager() external view returns (address);
 
-    function setLendingPoolCollateralManager(address manager) external;
+    function setLendingPoolCollateralManager(address manager) external payable;
 
     //********************************************************** */
 
     function getGlobalAdmin() external view returns (address);
 
-    function setGlobalAdmin(address admin) external;
+    function setGlobalAdmin(address admin) external payable;
 
     function getTrancheAdmin(uint64 trancheId) external view returns (address);
 
@@ -88,7 +88,7 @@ interface ILendingPoolAddressesProvider {
         view
         returns (address);
 
-    function setEmergencyAdmin(address admin) external;
+    function setEmergencyAdmin(address admin) external payable;
 
     function isWhitelistedAddress(address ad) external view returns (bool);
 
@@ -98,23 +98,23 @@ interface ILendingPoolAddressesProvider {
         view
         returns (address);
 
-    function setPriceOracle(address priceOracle) external;
+    function setPriceOracle(address priceOracle) external payable;
 
     function getAToken() external view returns (address);
-    function setATokenImpl(address pool) external;
+    function setATokenImpl(address pool) external payable;
 
     function getATokenBeacon() external view returns (address);
-    function setATokenBeacon(address pool) external;
+    function setATokenBeacon(address pool) external payable;
 
     function getVariableDebtToken() external view returns (address);
-    function setVariableDebtToken(address pool) external;
+    function setVariableDebtToken(address pool) external payable;
 
     function getVariableDebtTokenBeacon() external view returns (address);
-    function setVariableDebtTokenBeacon(address pool) external;
+    function setVariableDebtTokenBeacon(address pool) external payable;
 
     function getAssetMappings() external view returns (address);
-    function setAssetMappingsImpl(address pool) external;
+    function setAssetMappingsImpl(address pool) external payable;
 
     function getIncentivesController() external view returns (address);
-    function setIncentivesController(address incentives) external;
+    function setIncentivesController(address incentives) external payable;
 }
