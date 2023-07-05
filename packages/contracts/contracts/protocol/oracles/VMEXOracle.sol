@@ -163,7 +163,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
     }
 
     /**
-     * @dev Gets an asset price by address. 
+     * @dev Gets an asset price by address.
      * Note the result should always have 18 decimals if using ETH as base. If using USD as base, there will be 8 decimals
      * @param asset The asset address
      **/
@@ -218,8 +218,8 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 /*uint80 answeredInRound*/
             ) = IChainlinkPriceFeed(source).latestRoundData();
             IChainlinkAggregator aggregator = IChainlinkAggregator(IChainlinkPriceFeed(source).aggregator());
-            if (price > int256(aggregator.minAnswer()) && 
-                price < int256(aggregator.maxAnswer()) && 
+            if (price > int256(aggregator.minAnswer()) &&
+                price < int256(aggregator.maxAnswer()) &&
                 block.timestamp - updatedAt < _assetsSources[asset].heartbeat
             ) {
                 return uint256(price);
@@ -243,9 +243,10 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
             return _fallbackOracle.getAssetPrice(asset);
         }
 
-        uint256[] memory prices = new uint256[](c._poolSize);
+        uint256 poolSize = c._poolSize;
+        uint256[] memory prices = new uint256[](poolSize);
 
-        for (uint256 i = 0; i < c._poolSize; i++) {
+        for (uint256 i = 0; i < poolSize; i++) {
             address underlying = ICurvePool(c._curvePool).coins(i);
             if(underlying == ETH_NATIVE){
                 underlying = WETH;
