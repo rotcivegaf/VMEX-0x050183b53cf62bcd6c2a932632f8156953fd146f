@@ -138,8 +138,6 @@ library GenericLogic {
     }
 
     struct CalculateUserAccountDataVars {
-        uint64 currentTranche;
-        uint64 trancheId;
         uint256 reserveUnitPrice;
         uint256 tokenUnit;
         uint256 compoundedLiquidityBalance;
@@ -160,6 +158,8 @@ library GenericLogic {
         uint256 liquidityBalanceETH;
         address currentReserveAddress;
         address oracle;
+        uint64 currentTranche;
+        uint64 trancheId;
         address user;
         bool healthFactorBelowThreshold;
         bool usageAsCollateralEnabled;
