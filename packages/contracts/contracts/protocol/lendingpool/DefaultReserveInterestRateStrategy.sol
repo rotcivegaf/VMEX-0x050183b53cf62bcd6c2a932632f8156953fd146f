@@ -57,7 +57,7 @@ contract DefaultReserveInterestRateStrategy is IReserveInterestRateStrategy {
         uint256 __baseVariableBorrowRate,
         uint256 __variableRateSlope1,
         uint256 __variableRateSlope2
-    ) {
+    ) payable {
         OPTIMAL_UTILIZATION_RATE = optimalUtilizationRate;
         EXCESS_UTILIZATION_RATE = WadRayMath.ray().sub(optimalUtilizationRate);
         addressesProvider = provider;
