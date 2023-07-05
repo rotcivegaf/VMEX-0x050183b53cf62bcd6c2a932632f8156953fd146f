@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: agpl-3.0
 pragma solidity 0.8.19;
 
-import {SafeMath} from "../../../dependencies/openzeppelin/contracts/SafeMath.sol";
 import {IERC20} from "../../../dependencies/openzeppelin/contracts/IERC20.sol";
 import {ReserveLogic} from "./ReserveLogic.sol";
 import {ReserveConfiguration} from "../configuration/ReserveConfiguration.sol";
@@ -19,7 +18,6 @@ import {IAssetMappings} from "../../../interfaces/IAssetMappings.sol";
  */
 library GenericLogic {
     using ReserveLogic for DataTypes.ReserveData;
-    using SafeMath for uint256;
     using WadRayMath for uint256;
     using PercentageMath for uint256;
     using ReserveConfiguration for DataTypes.ReserveConfigurationMap;
@@ -108,9 +106,9 @@ library GenericLogic {
             )
         ).getAssetPrice(params.asset);
 
-        vars.amountToDecreaseInETH  = vars.currentPrice.mul(params.amount).div(10**vars.decimals);
+        vars.amountToDecreaseInETH  = vars.currentPrice * params.amount / (10**vars.decimals);
 
-        vars.collateralBalanceAfterDecrease = vars.totalCollateralInETH.sub(
+        vars.collateralBalanceAfterDecrease = vars.totalCollateralInETH - (
             vars.amountToDecreaseInETH
         );
 
@@ -119,11 +117,11 @@ library GenericLogic {
             return false;
         }
 
-        vars.liquidationThresholdAfterDecrease = vars
+        vars.liquidationThresholdAfterDecrease = ((vars
             .totalCollateralInETH
-            .mul(vars.avgLiquidationThreshold)
-            .sub(vars.amountToDecreaseInETH.mul(vars.liquidationThreshold))
-            .div(vars.collateralBalanceAfterDecrease);
+            * vars.avgLiquidationThreshold) // Gas saving: [G-04]
+            - (vars.amountToDecreaseInETH * vars.liquidationThreshold)) // Gas saving: [G-04]
+            / vars.collateralBalanceAfterDecrease; // Gas saving: [G-04]
 
 
         vars.healthFactorAfterDecrease = calculateHealthFactorFromBalances(
@@ -241,18 +239,18 @@ library GenericLogic {
                 // could also be in USD if reserveUnitPrice is in USD (with 8 decimals)
                 vars.liquidityBalanceETH = vars
                     .reserveUnitPrice
-                    .mul(vars.compoundedLiquidityBalance)
-                    .div(vars.tokenUnit);
+                    * vars.compoundedLiquidityBalance
+                    / vars.tokenUnit;
 
-                vars.totalCollateralInETH = vars.totalCollateralInETH.add(
+                vars.totalCollateralInETH = vars.totalCollateralInETH + (
                     vars.liquidityBalanceETH
                 );
 
-                vars.avgLtv = vars.avgLtv.add(
-                    vars.liquidityBalanceETH.mul(vars.ltv)
+                vars.avgLtv = vars.avgLtv + (
+                    vars.liquidityBalanceETH * vars.ltv
                 );
-                vars.avgLiquidationThreshold = vars.avgLiquidationThreshold.add(
-                    vars.liquidityBalanceETH.mul(vars.liquidationThreshold)
+                vars.avgLiquidationThreshold = vars.avgLiquidationThreshold + (
+                    vars.liquidityBalanceETH * vars.liquidationThreshold
                 );
             }
 
@@ -260,30 +258,30 @@ library GenericLogic {
                 vars.compoundedBorrowBalance =
                     IERC20(currentReserve.variableDebtTokenAddress).balanceOf(vars.user);
 
-                vars.thisDebtInEth = vars.reserveUnitPrice.mul(vars.compoundedBorrowBalance).div(
+                vars.thisDebtInEth = vars.reserveUnitPrice * vars.compoundedBorrowBalance / (
                         vars.tokenUnit
                     );
 
-                vars.totalDebtInETH = vars.totalDebtInETH.add(
+                vars.totalDebtInETH = vars.totalDebtInETH + (
                     vars.thisDebtInEth
                 );
 
                 if(vars.borrowFactor != 0){
-                    vars.avgBorrowFactor = vars.avgBorrowFactor.add(
-                        vars.thisDebtInEth.mul(vars.borrowFactor)
+                    vars.avgBorrowFactor = vars.avgBorrowFactor + (
+                        vars.thisDebtInEth * vars.borrowFactor
                     );
                 }
             }
         }
 
         vars.avgLtv = vars.totalCollateralInETH > 0
-            ? vars.avgLtv.div(vars.totalCollateralInETH)
+            ? vars.avgLtv / vars.totalCollateralInETH
             : 0; //weighted average of all ltv's across all supplied assets
         vars.avgLiquidationThreshold = vars.totalCollateralInETH > 0
-            ? vars.avgLiquidationThreshold.div(vars.totalCollateralInETH)
+            ? vars.avgLiquidationThreshold / vars.totalCollateralInETH
             : 0;
         vars.avgBorrowFactor = vars.totalDebtInETH > 0
-            ? vars.avgBorrowFactor.div(vars.totalDebtInETH)
+            ? vars.avgBorrowFactor / vars.totalDebtInETH
             : 0;
 
         vars.healthFactor = calculateHealthFactorFromBalances(
@@ -345,7 +343,7 @@ library GenericLogic {
             return 0;
         }
 
-        availableBorrowsETH = availableBorrowsETH.sub(totalDebtInETH.percentMul(avgBorrowFactor));
+        availableBorrowsETH = availableBorrowsETH - totalDebtInETH.percentMul(avgBorrowFactor);
         return availableBorrowsETH;
     }
 }

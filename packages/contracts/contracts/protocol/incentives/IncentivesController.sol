@@ -2,7 +2,6 @@
 pragma solidity 0.8.19;
 
 import {SafeERC20} from "../../dependencies/openzeppelin/contracts/SafeERC20.sol";
-import {SafeMath} from "../../dependencies/openzeppelin/contracts/SafeMath.sol";
 import {DistributionTypes} from '../libraries/types/DistributionTypes.sol';
 import {IDistributionManager} from '../../interfaces/IDistributionManager.sol';
 import {IAToken} from '../../interfaces/IAToken.sol';
@@ -24,7 +23,6 @@ contract IncentivesController is
   DistributionManager,
   ExternalRewardDistributor
 {
-  using SafeMath for uint256;
   using SafeERC20 for IERC20;
   uint256 public constant REVISION = 1;
 
@@ -35,7 +33,7 @@ contract IncentivesController is
     address emissionManager,
     address externalRewardManager,
     address addressesProvider
-  ) DistributionManager(emissionManager) 
+  ) DistributionManager(emissionManager)
     ExternalRewardDistributor(externalRewardManager, addressesProvider) {
     REWARDS_VAULT = rewardsVault;
   }
@@ -85,7 +83,7 @@ contract IncentivesController is
           } else if (newBalance > oldBalance) {
             onTransfer(user, newBalance - oldBalance, false);
           }
-          
+
       }
     }
   }

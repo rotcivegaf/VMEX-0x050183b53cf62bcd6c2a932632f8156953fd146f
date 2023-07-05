@@ -12,7 +12,6 @@ import {Helpers} from "../libraries/helpers/Helpers.sol";
 import {VersionedInitializable} from "../../dependencies/aave-upgradeability/VersionedInitializable.sol";
 import {IncentivizedERC20} from "./IncentivizedERC20.sol";
 import {IIncentivesController} from "../../interfaces/IIncentivesController.sol";
-import {SafeMath} from "../../dependencies/openzeppelin/contracts/SafeMath.sol";
 import {ReserveConfiguration} from "../libraries/configuration/ReserveConfiguration.sol";
 import {PercentageMath} from "../libraries/math/PercentageMath.sol";
 import {ILendingPoolAddressesProvider} from "../../interfaces/ILendingPoolAddressesProvider.sol";
@@ -31,7 +30,6 @@ contract AToken is
 {
     using WadRayMath for uint256;
     using SafeERC20 for IERC20;
-    using SafeMath for uint256;
     using ReserveConfiguration for *;
     using PercentageMath for uint256;
     using Helpers for address;
@@ -462,7 +460,7 @@ contract AToken is
             )
         );
         require(owner == ecrecover(digest, v, r, s), "INVALID_SIGNATURE");
-        _nonces[owner] = currentValidNonce.add(1);
+        _nonces[owner] = currentValidNonce + 1;
         _approve(owner, spender, value);
     }
 
