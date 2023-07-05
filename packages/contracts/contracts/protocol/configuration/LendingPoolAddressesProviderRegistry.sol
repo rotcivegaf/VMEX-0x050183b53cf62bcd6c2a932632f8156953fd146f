@@ -54,6 +54,7 @@ contract LendingPoolAddressesProviderRegistry is
      **/
     function registerAddressesProvider(address provider, uint256 id)
         external
+        payable
         override
         onlyOwner
     {
@@ -70,6 +71,7 @@ contract LendingPoolAddressesProviderRegistry is
      **/
     function unregisterAddressesProvider(address provider)
         external
+        payable
         override
         onlyOwner
     {

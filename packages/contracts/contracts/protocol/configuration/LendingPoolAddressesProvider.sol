@@ -60,7 +60,7 @@ contract LendingPoolAddressesProvider is
         return getAddress(VMEX_TREASURY_ADDRESS);
     }
 
-    function setVMEXTreasury(address add) external override onlyOwner {
+    function setVMEXTreasury(address add) external payable override onlyOwner {
         _setVMEXTreasury(add);
     }
 
@@ -113,7 +113,7 @@ contract LendingPoolAddressesProvider is
      * @dev Allows to set the market which this LendingPoolAddressesProvider represents
      * @param marketId The market id
      */
-    function setMarketId(string memory marketId) external override onlyOwner {
+    function setMarketId(string memory marketId) external payable override onlyOwner {
         _setMarketId(marketId);
     }
 
@@ -128,6 +128,7 @@ contract LendingPoolAddressesProvider is
      */
     function setAddressAsProxy(bytes32 id, address implementationAddress)
         external
+        payable
         override
         onlyOwner
     {
@@ -143,6 +144,7 @@ contract LendingPoolAddressesProvider is
      */
     function setAddress(bytes32 id, address newAddress)
         external
+        payable
         override
         onlyOwner
     {
@@ -171,7 +173,7 @@ contract LendingPoolAddressesProvider is
      * setting the new `pool` implementation on the first time calling it
      * @param pool The new LendingPool implementation
      **/
-    function setLendingPoolImpl(address pool) external override onlyOwner {
+    function setLendingPoolImpl(address pool) external payable override onlyOwner {
         _updateImpl(LENDING_POOL, pool);
         emit LendingPoolUpdated(pool);
     }
@@ -189,7 +191,7 @@ contract LendingPoolAddressesProvider is
      * setting the new `pool` implementation on the first time calling it
      * @param aToken The new aToken implementation
      **/
-    function setATokenImpl(address aToken) external override onlyOwner {
+    function setATokenImpl(address aToken) external payable override onlyOwner {
         _addresses[ATOKEN] = aToken;
         emit ATokenUpdated(aToken);
     }
@@ -206,7 +208,7 @@ contract LendingPoolAddressesProvider is
      * @dev Updates the implementation of the atoken beacon
      * @param aTokenBeacon The new aToken implementation
      **/
-    function setATokenBeacon(address aTokenBeacon) external override onlyOwner {
+    function setATokenBeacon(address aTokenBeacon) external payable override onlyOwner {
         _addresses[ATOKEN_BEACON] = aTokenBeacon;
         emit ATokenBeaconUpdated(aTokenBeacon);
     }
@@ -224,7 +226,7 @@ contract LendingPoolAddressesProvider is
      * setting the new `pool` implementation on the first time calling it
      * @param aToken The new aToken implementation
      **/
-    function setVariableDebtToken(address aToken) external override onlyOwner {
+    function setVariableDebtToken(address aToken) external payable override onlyOwner {
         // don't use _updateImpl since this just stores the address, the upgrade is done in LendingPoolConfigurator
         _addresses[VARIABLE_DEBT] = aToken;
         emit VariableDebtUpdated(aToken);
@@ -242,7 +244,7 @@ contract LendingPoolAddressesProvider is
      * @dev Updates the beacon implementation
      * @param variableDebtBeacon The new aToken implementation
      **/
-    function setVariableDebtTokenBeacon(address variableDebtBeacon) external override onlyOwner {
+    function setVariableDebtTokenBeacon(address variableDebtBeacon) external payable override onlyOwner {
         // don't use _updateImpl since this just stores the address, the upgrade is done in LendingPoolConfigurator
         _addresses[VARIABLE_DEBT_BEACON] = variableDebtBeacon;
         emit VariableDebtBeaconUpdated(variableDebtBeacon);
@@ -268,6 +270,7 @@ contract LendingPoolAddressesProvider is
      **/
     function setLendingPoolConfiguratorImpl(address newAddress)
         external
+        payable
         override
         onlyOwner
     {
@@ -297,6 +300,7 @@ contract LendingPoolAddressesProvider is
      **/
     function setLendingPoolCollateralManager(address manager)
         external
+        payable
         override
         onlyOwner
     {
@@ -322,7 +326,7 @@ contract LendingPoolAddressesProvider is
      * IMPORTANT Use this function carefully, as it will do a hard replacement
      * @param admin The address of the new admin
      **/
-    function setGlobalAdmin(address admin) external override onlyOwner {
+    function setGlobalAdmin(address admin) external payable override onlyOwner {
         _addresses[GLOBAL_ADMIN] = admin;
     }
 
@@ -383,7 +387,7 @@ contract LendingPoolAddressesProvider is
      * @dev Sets the emergency admin for the market
      * @param emergencyAdmin The address of the new admin
      **/
-    function setEmergencyAdmin(address emergencyAdmin) external override onlyOwner {
+    function setEmergencyAdmin(address emergencyAdmin) external payable override onlyOwner {
         _addresses[EMERGENCY_ADMIN] = emergencyAdmin;
         emit EmergencyAdminUpdated(emergencyAdmin);
     }
@@ -407,6 +411,7 @@ contract LendingPoolAddressesProvider is
      **/
     function setPriceOracle(address priceOracle)
         external
+        payable
         override
         onlyOwner
     {
@@ -460,7 +465,7 @@ contract LendingPoolAddressesProvider is
      * @dev Set the asset mappings
      * @param assetMappings The address of the new asset mappings
      **/
-    function setAssetMappingsImpl(address assetMappings) external override onlyOwner{
+    function setAssetMappingsImpl(address assetMappings) external payable override onlyOwner{
         _updateImpl(ASSET_MAPPINGS, assetMappings);
         emit AssetMappingsUpdated(assetMappings);
     }
@@ -469,7 +474,7 @@ contract LendingPoolAddressesProvider is
         return getAddress(INCENTIVES_CONTROLLER);
     }
 
-    function setIncentivesController(address incentives) external override onlyOwner{
+    function setIncentivesController(address incentives) external payable override onlyOwner{
         _addresses[INCENTIVES_CONTROLLER] = incentives;
         emit IncentivesControllerUpdated(incentives);
     }
