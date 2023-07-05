@@ -163,7 +163,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
     }
 
     /**
-     * @dev Gets an asset price by address. 
+     * @dev Gets an asset price by address.
      * Note the result should always have 18 decimals if using ETH as base. If using USD as base, there will be 8 decimals
      * @param asset The asset address
      **/
@@ -218,8 +218,8 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 /*uint80 answeredInRound*/
             ) = IChainlinkPriceFeed(source).latestRoundData();
             IChainlinkAggregator aggregator = IChainlinkAggregator(IChainlinkPriceFeed(source).aggregator());
-            if (price > int256(aggregator.minAnswer()) && 
-                price < int256(aggregator.maxAnswer()) && 
+            if (price > int256(aggregator.minAnswer()) &&
+                price < int256(aggregator.maxAnswer()) &&
                 block.timestamp - updatedAt < _assetsSources[asset].heartbeat
             ) {
                 return uint256(price);
@@ -251,7 +251,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 underlying = WETH;
             }
             prices[i] = getAssetPrice(underlying); //handles case where underlying is curve too.
-            require(prices[i] > 0, Errors.VO_UNDERLYING_FAIL);
+            require(prices[i] != 0, Errors.VO_UNDERLYING_FAIL);
         }
 
         if(assetType==DataTypes.ReserveAssetType.CURVE){
@@ -282,13 +282,13 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
             token0 = WETH;
         }
         prices[0] = getAssetPrice(token0); //handles case where underlying is curve too.
-        require(prices[0] > 0, Errors.VO_UNDERLYING_FAIL);
+        require(prices[0] != 0, Errors.VO_UNDERLYING_FAIL);
 
         if(token1 == ETH_NATIVE){
             token1 = WETH;
         }
         prices[1] = getAssetPrice(token1); //handles case where underlying is curve too.
-        require(prices[1] > 0, Errors.VO_UNDERLYING_FAIL);
+        require(prices[1] != 0, Errors.VO_UNDERLYING_FAIL);
 
         price = VelodromeOracle.get_lp_price(asset, prices);
         if(price == 0){
@@ -330,7 +330,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
                 token = WETH;
             }
             prices[j] = getAssetPrice(token);
-            require(prices[j] > 0, Errors.VO_UNDERLYING_FAIL);
+            require(prices[j] != 0, Errors.VO_UNDERLYING_FAIL);
             i++;
             j++;
         }
