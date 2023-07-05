@@ -124,7 +124,8 @@ contract DistributionManager is IDistributionManager {
     assert(userBalance <= assetSupply); // will catch cases such as if userBalance and assetSupply were flipped
     DistributionTypes.IncentivizedAsset storage incentivizedAsset = _incentivizedAssets[asset];
 
-    for (uint128 i = 0; i < incentivizedAsset.numRewards; i++) {
+    uint256 incentivizedAssetNumRewards = incentivizedAsset.numRewards;
+    for (uint128 i = 0; i < incentivizedAssetNumRewards; i++) {
       address rewardAddress = incentivizedAsset.rewardList[i];
 
       DistributionTypes.Reward storage reward = incentivizedAsset.rewardData[rewardAddress];
@@ -154,7 +155,8 @@ contract DistributionManager is IDistributionManager {
     address user,
     DistributionTypes.UserAssetState[] memory userAssets
   ) internal {
-    for (uint256 i = 0; i < userAssets.length; i++) {
+    uint256 userAssetsLength = userAssets.length;
+    for (uint256 i = 0; i < userAssetsLength; i++) {
       _updateIncentivizedAsset(
         userAssets[i].asset,
         user,
@@ -258,7 +260,8 @@ contract DistributionManager is IDistributionManager {
     address reward
   ) external view override returns (uint256) {
     uint256 total;
-    for (uint256 i = 0; i < _allIncentivizedAssets.length; i++) {
+    uint256 _allIncentivizedAssetsLength = _allIncentivizedAssets.length;
+    for (uint256 i = 0; i < _allIncentivizedAssetsLength; i++) {
       total += _incentivizedAssets[_allIncentivizedAssets[i]]
         .rewardData[reward]
         .users[user]

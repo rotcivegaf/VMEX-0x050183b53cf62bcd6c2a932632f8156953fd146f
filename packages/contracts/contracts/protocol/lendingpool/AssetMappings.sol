@@ -372,7 +372,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);
@@ -424,8 +424,9 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      * @dev Sets curve metadata for an array of assets.
      **/
     function setCurveMetadata(address[] calldata assets, DataTypes.CurveMetadata[] calldata vars) external override onlyGlobalAdmin {
-        require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        uint256 assetsLength = assets.length;
+        require(assetsLength == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
+        for(uint i = 0;i<assetsLength;i++){
             curveMetadata[assets[i]] = vars[i];
         }
     }
@@ -438,8 +439,9 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      * @dev Sets beethoven metadata for an array of assets.
      **/
     function setBeethovenMetadata(address[] calldata assets, DataTypes.BeethovenMetadata[] calldata vars) external onlyGlobalAdmin {
-        require(assets.length == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for(uint i = 0;i<assets.length;i++){
+        uint256 assetsLength = assets.length;
+        require(assetsLength == vars.length, Errors.ARRAY_LENGTH_MISMATCH);
+        for(uint i = 0;i<assetsLength;i++){
             beethovenMetadata[assets[i]] = vars[i];
         }
     }
