@@ -39,8 +39,9 @@ contract LendingPoolAddressesProviderRegistry is
         address[] memory activeProviders = new address[](maxLength);
 
         for (uint256 i = 0; i < maxLength; i++) {
-            if (_addressesProviders[addressesProvidersList[i]] > 0) {
-                activeProviders[i] = addressesProvidersList[i];
+            address list = addressesProvidersList[i];
+            if (_addressesProviders[list] > 0) {
+                activeProviders[i] = list;
             }
         }
 

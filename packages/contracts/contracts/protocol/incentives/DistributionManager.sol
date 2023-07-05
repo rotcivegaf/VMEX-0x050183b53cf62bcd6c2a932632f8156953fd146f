@@ -99,13 +99,13 @@ contract DistributionManager is IDistributionManager {
     bool updated;
     uint256 accrued;
     uint256 userIndex = reward.users[user].index;
-
-    if (userIndex != reward.index) {
+    uint256 rewardIndex = reward.index;
+    if (userIndex != rewardIndex) {
       if (balance != 0) {
-        accrued = _getReward(balance, reward.index, userIndex, decimals);
+        accrued = _getReward(balance, rewardIndex, userIndex, decimals);
         reward.users[user].accrued += accrued;
       }
-      reward.users[user].index = reward.index;
+      reward.users[user].index = rewardIndex;
       updated = true;
     }
 
@@ -123,7 +123,7 @@ contract DistributionManager is IDistributionManager {
   ) internal {
     assert(userBalance <= assetSupply); // will catch cases such as if userBalance and assetSupply were flipped
     DistributionTypes.IncentivizedAsset storage incentivizedAsset = _incentivizedAssets[asset];
-
+    uint8 incentivizedAssetDecimals = incentivizedAsset.decimals = incentivizedAsset.decimals;
     for (uint128 i = 0; i < incentivizedAsset.numRewards; i++) {
       address rewardAddress = incentivizedAsset.rewardList[i];
 
@@ -132,13 +132,13 @@ contract DistributionManager is IDistributionManager {
       (uint256 newIndex, bool rewardUpdated) = _updateReward(
         reward,
         assetSupply,
-        incentivizedAsset.decimals
+        incentivizedAssetDecimals
       );
       (uint256 rewardAccrued, bool userUpdated) = _updateUser(
         reward,
         user,
         userBalance,
-        incentivizedAsset.decimals
+        incentivizedAssetDecimals
       );
 
       if (rewardUpdated || userUpdated) {
@@ -155,11 +155,12 @@ contract DistributionManager is IDistributionManager {
     DistributionTypes.UserAssetState[] memory userAssets
   ) internal {
     for (uint256 i = 0; i < userAssets.length; i++) {
+      DistributionTypes.UserAssetState memory userAsset = userAssets[i];
       _updateIncentivizedAsset(
-        userAssets[i].asset,
+        userAsset.asset,
         user,
-        userAssets[i].userBalance,
-        userAssets[i].totalSupply
+        userAsset.userBalance,
+        userAsset.totalSupply
       );
     }
   }
