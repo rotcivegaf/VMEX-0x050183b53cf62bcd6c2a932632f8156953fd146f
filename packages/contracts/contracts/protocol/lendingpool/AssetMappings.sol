@@ -198,7 +198,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
      *      that were already added
      **/
     function addAssetMapping(
-        AddAssetMappingInput[] memory input
+        AddAssetMappingInput[] calldata input
     ) external onlyGlobalAdmin {
         for(uint256 i = 0; i<input.length; i++) {
             AddAssetMappingInput memory inputAsset = input[i];
@@ -372,7 +372,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         return interestRateStrategyAddress[asset][choice];
     }
 
-    
+
     function getAssetType(address asset) view external returns(DataTypes.ReserveAssetType){
         require(assetMappings[asset].isAllowed, Errors.AM_ASSET_NOT_ALLOWED); //not existing
         return DataTypes.ReserveAssetType(assetMappings[asset].assetType);

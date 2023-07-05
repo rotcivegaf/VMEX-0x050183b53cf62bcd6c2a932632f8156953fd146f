@@ -155,7 +155,7 @@ contract LendingPoolConfigurator is
     }
 
     function _initReserve(
-        InitReserveInput memory input,
+        InitReserveInput calldata input,
         uint64 trancheId,
         DataTypes.AssetData memory assetdata,
         ILendingPool cachedPool

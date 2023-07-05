@@ -35,7 +35,7 @@ contract IncentivesController is
     address emissionManager,
     address externalRewardManager,
     address addressesProvider
-  ) DistributionManager(emissionManager) 
+  ) DistributionManager(emissionManager)
     ExternalRewardDistributor(externalRewardManager, addressesProvider) {
     REWARDS_VAULT = rewardsVault;
   }
@@ -85,13 +85,13 @@ contract IncentivesController is
           } else if (newBalance > oldBalance) {
             onTransfer(user, newBalance - oldBalance, false);
           }
-          
+
       }
     }
   }
 
   function _getUserState(
-    address[] memory assets,
+    address[] calldata assets,
     address user
   ) internal view returns (DistributionTypes.UserAssetState[] memory) {
     DistributionTypes.UserAssetState[] memory userState = new DistributionTypes.UserAssetState[](
