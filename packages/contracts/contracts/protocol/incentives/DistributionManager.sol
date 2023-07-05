@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: agpl-3.0
 pragma solidity 0.8.19;
 
-import {SafeMath} from "../../dependencies/openzeppelin/contracts/SafeMath.sol";
 import {DistributionTypes} from '../libraries/types/DistributionTypes.sol';
 import {IDistributionManager} from '../../interfaces/IDistributionManager.sol';
 import {IAToken} from '../../interfaces/IAToken.sol';
@@ -13,8 +12,6 @@ import {IERC20Detailed} from "../../dependencies/openzeppelin/contracts/IERC20De
  * @author Aave and VMEX
  **/
 contract DistributionManager is IDistributionManager {
-  using SafeMath for uint256;
-
   //atoken address to distribution data
   mapping(address => DistributionTypes.IncentivizedAsset) internal _incentivizedAssets;
 
@@ -179,7 +176,7 @@ contract DistributionManager is IDistributionManager {
     uint256 userIndex,
     uint8 decimals
   ) internal pure returns (uint256) {
-    return principalUserBalance.mul(rewardIndex.sub(userIndex)).div(10 ** decimals);
+    return principalUserBalance * (rewardIndex - userIndex) / (10 ** decimals);
   }
 
   /**
@@ -206,9 +203,9 @@ contract DistributionManager is IDistributionManager {
     uint256 currentTimestamp = block.timestamp > reward.endTimestamp
       ? reward.endTimestamp
       : block.timestamp;
-    uint256 timeDelta = currentTimestamp.sub(reward.lastUpdateTimestamp);
+    uint256 timeDelta = currentTimestamp - reward.lastUpdateTimestamp;
     return
-      uint256(reward.emissionPerSecond).mul(timeDelta).mul(10 ** decimals).div(totalSupply).add(
+      ((uint256(reward.emissionPerSecond) * timeDelta * (10 ** decimals)) / totalSupply) + (
         reward.index
       );
   }
