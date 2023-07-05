@@ -347,8 +347,8 @@ contract LendingPoolAddressesProvider is
      **/
     function setTrancheAdmin(address admin, uint64 trancheId) external override {
         require(
-            _msgSender() == owner() ||
-                _msgSender() == _trancheAdmins[trancheId],
+            msg.sender == owner() ||
+                msg.sender == _trancheAdmins[trancheId],
             Errors.CALLER_NOT_TRANCHE_ADMIN
         );
         _trancheAdmins[trancheId] = admin;
@@ -363,7 +363,7 @@ contract LendingPoolAddressesProvider is
     function addTrancheAdmin(address admin, uint64 trancheId) external override {
         // anyone can add their own tranche, but you just have to choose a trancheId that hasn't been used yet
         require(
-            _msgSender() == getAddress(LENDING_POOL_CONFIGURATOR),
+            msg.sender == getAddress(LENDING_POOL_CONFIGURATOR),
             Errors.LP_CALLER_NOT_LENDING_POOL_CONFIGURATOR
         );
         assert(_trancheAdmins[trancheId] == address(0)); //this should never be false

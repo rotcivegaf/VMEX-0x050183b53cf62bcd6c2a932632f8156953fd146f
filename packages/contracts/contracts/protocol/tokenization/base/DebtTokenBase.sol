@@ -33,7 +33,7 @@ abstract contract DebtTokenBase is
      **/
     modifier onlyLendingPool {
         require(
-            _msgSender() == address(_getLendingPool()),
+            msg.sender == address(_getLendingPool()),
             Errors.CT_CALLER_MUST_BE_LENDING_POOL
         );
         _;
@@ -50,9 +50,9 @@ abstract contract DebtTokenBase is
         external
         override
     {
-        _borrowAllowances[_msgSender()][delegatee] = amount;
+        _borrowAllowances[msg.sender][delegatee] = amount;
         emit BorrowAllowanceDelegated(
-            _msgSender(),
+            msg.sender,
             delegatee,
             _getUnderlyingAssetAddress(),
             amount

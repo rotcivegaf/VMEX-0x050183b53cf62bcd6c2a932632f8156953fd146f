@@ -59,7 +59,7 @@ contract AToken is
 
     modifier onlyLendingPool() {
         require(
-            _msgSender() == address(_pool),
+            msg.sender == address(_pool),
             Errors.CT_CALLER_MUST_BE_LENDING_POOL
         );
         _;
@@ -67,7 +67,7 @@ contract AToken is
 
     modifier onlyLendingPoolConfigurator() {
         require(
-            _msgSender() == _lendingPoolConfigurator,
+            msg.sender == _lendingPoolConfigurator,
             Errors.LP_CALLER_NOT_LENDING_POOL_CONFIGURATOR
         );
         _;

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: agpl-3.0
 pragma solidity 0.8.19;
 
-import {Context} from "../../dependencies/openzeppelin/contracts/Context.sol";
 import {IERC20} from "../../dependencies/openzeppelin/contracts/IERC20.sol";
 import {
     IERC20Detailed
@@ -17,7 +16,7 @@ import {DistributionTypes} from '../libraries/types/DistributionTypes.sol';
  * @notice Basic ERC20 implementation
  * @author Aave, inspired by the Openzeppelin ERC20 implementation
  **/
-abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
+abstract contract IncentivizedERC20 is IERC20, IERC20Detailed {
     using SafeMath for uint256;
 
     mapping(address => uint256) internal _balances;
@@ -90,7 +89,7 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         returns (IIncentivesController);
 
     /**
-     * @dev Executes a transfer of tokens from _msgSender() to recipient
+     * @dev Executes a transfer of tokens from msg.sender to recipient
      * @param recipient The recipient of the tokens
      * @param amount The amount of tokens being transferred
      * @return `true` if the transfer succeeds, `false` otherwise
@@ -101,8 +100,8 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         override
         returns (bool)
     {
-        _transfer(_msgSender(), recipient, amount);
-        emit Transfer(_msgSender(), recipient, amount);
+        _transfer(msg.sender, recipient, amount);
+        emit Transfer(msg.sender, recipient, amount);
         return true;
     }
 
@@ -123,8 +122,8 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
     }
 
     /**
-     * @dev Allows `spender` to spend the tokens owned by _msgSender()
-     * @param spender The user allowed to spend _msgSender() tokens
+     * @dev Allows `spender` to spend the tokens owned by msg.sender
+     * @param spender The user allowed to spend msg.sender tokens
      * @return `true`
      **/
     function approve(address spender, uint256 amount)
@@ -133,12 +132,12 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         override
         returns (bool)
     {
-        _approve(_msgSender(), spender, amount);
+        _approve(msg.sender, spender, amount);
         return true;
     }
 
     /**
-     * @dev Executes a transfer of token from sender to recipient, if _msgSender() is allowed to do so
+     * @dev Executes a transfer of token from sender to recipient, if msg.sender is allowed to do so
      * @param sender The owner of the tokens
      * @param recipient The recipient of the tokens
      * @param amount The amount of tokens being transferred
@@ -152,8 +151,8 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         _transfer(sender, recipient, amount);
         _approve(
             sender,
-            _msgSender(),
-            _allowances[sender][_msgSender()].sub(
+            msg.sender,
+            _allowances[sender][msg.sender].sub(
                 amount,
                 "ERC20: transfer amount exceeds allowance"
             )
@@ -163,8 +162,8 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
     }
 
     /**
-     * @dev Increases the allowance of spender to spend _msgSender() tokens
-     * @param spender The user allowed to spend on behalf of _msgSender()
+     * @dev Increases the allowance of spender to spend msg.sender tokens
+     * @param spender The user allowed to spend on behalf of msg.sender
      * @param addedValue The amount being added to the allowance
      * @return `true`
      **/
@@ -174,16 +173,16 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         returns (bool)
     {
         _approve(
-            _msgSender(),
+            msg.sender,
             spender,
-            _allowances[_msgSender()][spender].add(addedValue)
+            _allowances[msg.sender][spender].add(addedValue)
         );
         return true;
     }
 
     /**
-     * @dev Decreases the allowance of spender to spend _msgSender() tokens
-     * @param spender The user allowed to spend on behalf of _msgSender()
+     * @dev Decreases the allowance of spender to spend msg.sender tokens
+     * @param spender The user allowed to spend on behalf of msg.sender
      * @param subtractedValue The amount being subtracted to the allowance
      * @return `true`
      **/
@@ -193,9 +192,9 @@ abstract contract IncentivizedERC20 is Context, IERC20, IERC20Detailed {
         returns (bool)
     {
         _approve(
-            _msgSender(),
+            msg.sender,
             spender,
-            _allowances[_msgSender()][spender].sub(
+            _allowances[msg.sender][spender].sub(
                 subtractedValue,
                 "ERC20: decreased allowance below zero"
             )

@@ -14,7 +14,7 @@ import {AToken} from "./AToken.sol";
 contract DelegationAwareAToken is AToken {
     modifier onlyGlobalAdmin() {
         require(
-            _msgSender() ==
+            msg.sender ==
                 ILendingPool(_pool).getAddressesProvider().getGlobalAdmin(),
             Errors.CALLER_NOT_GLOBAL_ADMIN
         );
