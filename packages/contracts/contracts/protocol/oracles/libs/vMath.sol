@@ -20,10 +20,10 @@ library vMath {
 	}
 
 	function weightedAvg(uint256[] calldata prices, uint256[] calldata balances, uint8[] calldata decimals) internal pure returns(uint256) {
-		uint256 cumSum = 0;
-		uint256 cumBalances = 0;
+		uint256 cumSum;
+		uint256 cumBalances;
 		uint256 pricesLength = prices.length;
-		for(uint i = 0;i<pricesLength;i++) {
+		for(uint i;i<pricesLength;i++) {
 			cumSum += prices[i]*balances[i]/10**decimals[i]; //18 decimals
 			cumBalances += balances[i]*1e18/10**decimals[i]; //18 decimals
 		}

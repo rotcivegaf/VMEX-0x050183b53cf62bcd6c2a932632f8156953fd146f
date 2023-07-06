@@ -102,7 +102,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         ChainlinkData[] calldata sources
     ) external onlyGlobalAdmin {
         require(assets.length == sources.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for (uint256 i = 0; i < assets.length; i++) {
+        for (uint256 i; i < assets.length; i++) {
             require(Helpers.compareSuffix(IChainlinkPriceFeed(sources[i].feed).description(), BASE_CURRENCY_STRING), Errors.VO_BAD_DENOMINATION);
             _assetsSources[assets[i]] = sources[i];
             emit AssetSourceUpdated(assets[i], address(sources[i].feed));
@@ -246,7 +246,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         uint256 poolSize = c._poolSize;
         uint256[] memory prices = new uint256[](poolSize);
 
-        for (uint256 i = 0; i < poolSize; i++) {
+        for (uint256 i; i < poolSize; i++) {
             address underlying = ICurvePool(c._curvePool).coins(i);
             if(underlying == ETH_NATIVE){
                 underlying = WETH;
@@ -315,7 +315,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
             ,
         ) = vault.getPoolTokens(poolId);
 
-        uint256 i = 0;
+        uint256 i;
 
         if(address(tokens[0]) == asset) { //boosted tokens first token is itself
             i = 1;
@@ -323,7 +323,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
 
         uint256[] memory prices = new uint256[](tokens.length-i);
 
-        uint256 j = 0;
+        uint256 j;
 
         while(i<tokens.length) {
             address token = address(tokens[i]);
@@ -387,7 +387,7 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         returns (uint256[] memory)
     {
         uint256[] memory prices = new uint256[](assets.length);
-        for (uint256 i = 0; i < assets.length; i++) {
+        for (uint256 i; i < assets.length; i++) {
             prices[i] = getAssetPrice(assets[i]);
         }
         return prices;

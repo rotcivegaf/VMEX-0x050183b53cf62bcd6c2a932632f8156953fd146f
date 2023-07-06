@@ -62,9 +62,6 @@ library Helpers {
                 queryResult = abi.decode(result, (string));
             }
         }
-        else {
-            queryResult = "";
-        }
     }
 
     /**
@@ -100,7 +97,7 @@ library Helpers {
 
         bytes memory suffixBytes = new bytes(targetLen);
 
-        for (uint i = 0; i < targetLen; i++) {
+        for (uint i; i < targetLen; i++) {
             suffixBytes[i] = bytes(str)[suffixStart + i];
         }
 

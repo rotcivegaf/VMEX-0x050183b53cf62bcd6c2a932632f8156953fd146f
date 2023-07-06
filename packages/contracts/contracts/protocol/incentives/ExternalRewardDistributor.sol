@@ -77,7 +77,7 @@ contract ExternalRewardDistributor is IExternalRewardsDistributor {
   ) external onlyManager {
     require(aTokens.length == stakingContracts.length, "Malformed input");
 
-    for(uint i = 0; i < aTokens.length; i++) {
+    for(uint i; i < aTokens.length; i++) {
         beginStakingReward(aTokens[i], stakingContracts[i]);
     }
   }

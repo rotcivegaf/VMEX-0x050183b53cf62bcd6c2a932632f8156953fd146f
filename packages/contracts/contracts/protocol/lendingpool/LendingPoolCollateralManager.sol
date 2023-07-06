@@ -324,8 +324,8 @@ contract LendingPoolCollateralManager is
         uint256 debtToCover,
         uint256 userCollateralBalance
     ) internal returns (uint256, uint256) {
-        uint256 collateralAmount = 0;
-        uint256 debtAmountNeeded = 0;
+        uint256 collateralAmount;
+        uint256 debtAmountNeeded;
 
         AvailableCollateralToLiquidateLocalVars memory vars;
         {
