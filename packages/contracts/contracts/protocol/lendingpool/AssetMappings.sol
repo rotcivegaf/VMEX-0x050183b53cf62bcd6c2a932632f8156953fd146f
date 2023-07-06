@@ -118,7 +118,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
     function setVMEXReserveFactor(
         address asset,
         uint256 reserveFactor
-    ) public onlyGlobalAdmin {
+    ) external onlyGlobalAdmin {
         require(isAssetInMappings(asset), Errors.AM_ASSET_DOESNT_EXIST);
         uint256 thisReserveFactor = reserveFactor.convertToPercent();
         validateVMEXReserveFactor(thisReserveFactor);
