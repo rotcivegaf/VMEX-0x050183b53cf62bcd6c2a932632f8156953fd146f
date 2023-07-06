@@ -11,10 +11,11 @@ library vMath {
 	function min(uint256[] memory array) internal pure returns(uint256) {
 		uint256 _min = array[0];
 		uint256 arrayLength = array.length;
-		for (uint8 i = 1; i < arrayLength; i++) {
+		for (uint8 i = 1; i < arrayLength;) {
 			if (_min > array[i]) {
 				_min = array[i];
 			}
+			unchecked{ ++i; }
 		}
 		return _min;
 	}
@@ -23,9 +24,10 @@ library vMath {
 		uint256 cumSum;
 		uint256 cumBalances;
 		uint256 pricesLength = prices.length;
-		for(uint i;i<pricesLength;i++) {
+		for(uint i;i<pricesLength;) {
 			cumSum += prices[i]*balances[i]/10**decimals[i]; //18 decimals
 			cumBalances += balances[i]*1e18/10**decimals[i]; //18 decimals
+			unchecked{ ++i; }
 		}
 
 		return cumSum * 1e18 / cumBalances; //18 decimals
@@ -34,8 +36,9 @@ library vMath {
 	function product(uint256[] memory nums) internal pure returns(uint256) {
 		uint256 _product = nums[0];
 		uint256 numsLength = nums.length;
-		for (uint256 i = 1; i < numsLength; i++) {
+		for (uint256 i = 1; i < numsLength;) {
 			_product *= nums[i];
+			unchecked{ ++i; }
 		}
 		return _product;
 	}

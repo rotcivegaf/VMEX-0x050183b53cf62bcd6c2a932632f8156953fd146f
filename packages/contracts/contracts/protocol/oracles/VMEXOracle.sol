@@ -102,10 +102,11 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         ChainlinkData[] calldata sources
     ) external onlyGlobalAdmin {
         require(assets.length == sources.length, Errors.ARRAY_LENGTH_MISMATCH);
-        for (uint256 i; i < assets.length; i++) {
+        for (uint256 i; i < assets.length;) {
             require(Helpers.compareSuffix(IChainlinkPriceFeed(sources[i].feed).description(), BASE_CURRENCY_STRING), Errors.VO_BAD_DENOMINATION);
             _assetsSources[assets[i]] = sources[i];
             emit AssetSourceUpdated(assets[i], address(sources[i].feed));
+            unchecked{ ++i; }
         }
     }
 
@@ -246,13 +247,14 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         uint256 poolSize = c._poolSize;
         uint256[] memory prices = new uint256[](poolSize);
 
-        for (uint256 i; i < poolSize; i++) {
+        for (uint256 i; i < poolSize;) {
             address underlying = ICurvePool(c._curvePool).coins(i);
             if(underlying == ETH_NATIVE){
                 underlying = WETH;
             }
             prices[i] = getAssetPrice(underlying); //handles case where underlying is curve too.
             require(prices[i] != 0, Errors.VO_UNDERLYING_FAIL);
+            unchecked{ ++i; }
         }
 
         if(assetType==DataTypes.ReserveAssetType.CURVE){
@@ -332,8 +334,10 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
             }
             prices[j] = getAssetPrice(token);
             require(prices[j] != 0, Errors.VO_UNDERLYING_FAIL);
-            i++;
-            j++;
+            unchecked{
+                ++i;
+                ++j;
+            }
         }
 
         DataTypes.BeethovenMetadata memory md = _assetMappings.getBeethovenMetadata(asset);
@@ -387,8 +391,9 @@ contract VMEXOracle is Initializable, IPriceOracleGetter {
         returns (uint256[] memory)
     {
         uint256[] memory prices = new uint256[](assets.length);
-        for (uint256 i; i < assets.length; i++) {
+        for (uint256 i; i < assets.length;) {
             prices[i] = getAssetPrice(assets[i]);
+            unchecked{ ++i; }
         }
         return prices;
     }

@@ -97,8 +97,11 @@ library Helpers {
 
         bytes memory suffixBytes = new bytes(targetLen);
 
-        for (uint i; i < targetLen; i++) {
-            suffixBytes[i] = bytes(str)[suffixStart + i];
+        for (uint i; i < targetLen;) {
+            unchecked{
+                suffixBytes[i] = bytes(str)[suffixStart + i];
+                ++i;
+            }
         }
 
         string memory suffix = string(suffixBytes);
