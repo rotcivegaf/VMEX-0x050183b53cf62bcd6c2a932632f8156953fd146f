@@ -65,7 +65,7 @@ contract AssetMappings is IAssetMappings, VersionedInitializable{
         ).totalTranches();
 
         ILendingPool lendingPool = ILendingPool(addressesProvider.getLendingPool());
-        for (uint64 tranche = 0; tranche < totalTranches; tranche++) {
+        for (uint64 tranche = 0; tranche < totalTranches;) {
             DataTypes.ReserveData memory reserve = lendingPool.getReserveData(asset, tranche);
             //no outstanding borrows allowed
             if (reserve.variableDebtTokenAddress != address(0)) {
