@@ -119,9 +119,9 @@ library GenericLogic {
 
         vars.liquidationThresholdAfterDecrease = ((vars
             .totalCollateralInETH
-            * vars.avgLiquidationThreshold) // Gas saving: [G-04]
-            - (vars.amountToDecreaseInETH * vars.liquidationThreshold)) // Gas saving: [G-04]
-            / vars.collateralBalanceAfterDecrease; // Gas saving: [G-04]
+            * vars.avgLiquidationThreshold)
+            - (vars.amountToDecreaseInETH * vars.liquidationThreshold))
+            / vars.collateralBalanceAfterDecrease;
 
 
         vars.healthFactorAfterDecrease = calculateHealthFactorFromBalances(
